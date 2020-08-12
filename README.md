@@ -16,8 +16,8 @@ left-handed) guitars.
 
 Unlike most fretboard diagrams you can found online, `fretl`
 
-1. Supports mirrored guitar (only), since people can disagree upon how
-   guitar should be held.
+1. Supports mirrored guitar (only), since some misfortuned ones learned to
+   reason about notes on guitar the opposite way.
 2. Has first-class support for alternative tunings, since people can disagree
    upon how guitar should be tuned.
 3. Has no assumption about how many strings a guitar should have, with the same
