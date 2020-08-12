@@ -84,6 +84,10 @@ Then use `make` to compile and install it to system:
     $ make
     # make install
 
+You could also use the `PREFIX` option to install for current user only:
+
+    $ make PREFIX=~/.local install
+
 Further reading
 ---------------
 
