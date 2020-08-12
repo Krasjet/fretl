@@ -1,0 +1,172 @@
+.TH FRETL 1
+.SH NAME
+fretl \- display a mirrored (left-handed) guitar fretboard in
+.SM ASCII
+format
+.
+.SH SYNOPSIS
+.B fretl
+.RB [ \-r
+.IR root ]
+.RB [ \-f
+.IR fret ]
+.RB [ \-d ]
+.RI [ tuning ]
+.
+.SH DESCRIPTION
+.B fretl
+prints a fretboard in text format.
+It is specifically designed for mirrored (left-handed) guitar and alternative
+tunings.
+.PP
+The program takes a list of intervals in shorthand notation from
+.I stdin
+to identify a scale, mode, or chord.
+For example, the intervals for major scale is
+.PP
+.in +4n
+.EX
+P1 M2 M3 P4 P5 M6 M7
+.EE
+.in
+.PP
+You should use either pipes or input redirection to pass the interval list into
+.BR fretl ,
+since the program will use
+.I major scale
+as the default when
+.I stdin
+is not piped or redirected.
+See the
+.I EXAMPLES
+section for some practical examples.
+.PP
+You should also specify a
+.I root
+note, or tonic when talking about scales, using
+the
+.B -r
+option, and a
+.I tuning
+for the fretboard using command-line arguments.
+.
+For example,
+.PP
+.in +4n
+.EX
+$ \fBfretl\fP -rA DAEAC#E
+.EE
+.in
+.PP
+sets the
+.I root
+note to
+.B A
+and
+.I tuning
+to
+.BR DAEAC#E .
+If they are not provided, the default is A major scale for
+.B DAEABE
+tuning.
+.SH OPTIONS
+.TP
+.BI \-r " root"
+Set the root note (or tonal) of a chord, scale, or mode.
+The default is
+.BR A .
+At most 1 sharp or flat is allowed.
+For example, you could use
+.BR C# ,
+.BR Bb ,
+.BR E ,
+etc.
+.TP
+.BI \-f " fret"
+Set the maximum fret to be displayed.
+Must be at least 1.
+The default is 12.
+.TP
+.B \-d
+Display notes in scale degrees instead of pitch classes.
+.
+.SH EXAMPLES
+Display the notes of D major scale in
+.B DAEAC#E
+tuning, limited to 7 frets:
+.PP
+.in +4n
+.EX
+$ echo 'P1 M2 M3 P4 P5 M6 M7' | \fBfretl\fP -f7 -rA DAEAC#E
+   7      6      5      4      3      2      1      0
++--.-------------.-------------.------------------+
+|--B---|------|--A---|--G#--|------|--F#--|------|| E
+|--G#--|------|--F#--|------|--E---|------|--D---|| C#
+|--E---|------|--D---|--C#--|------|--B---|------|| A
+|--B---|------|--A---|--G#--|------|--F#--|------|| E
+|--E---|------|--D---|--C#--|------|--B---|------|| A
+|--A---|--G#--|------|--F#--|------|--E---|------|| D
++--.-------------.-------------.------------------+
+.EE
+.in
+.PP
+Alternatively, use predefined scales in the
+.I scales
+directory that comes with the source code:
+.PP
+.in +4n
+.EX
+$ \fBfretl\fP f7 -rA DAEAC#E < scales/major
+   7      6      5      4      3      2      1      0
++--.-------------.-------------.------------------+
+|--B---|------|--A---|--G#--|------|--F#--|------|| E
+|--G#--|------|--F#--|------|--E---|------|--D---|| C#
+|--E---|------|--D---|--C#--|------|--B---|------|| A
+|--B---|------|--A---|--G#--|------|--F#--|------|| E
+|--E---|------|--D---|--C#--|------|--B---|------|| A
+|--A---|--G#--|------|--F#--|------|--E---|------|| D
++--.-------------.-------------.------------------+
+.EE
+.in
+.PP
+Display notes in scale degree format with the
+.B \-d
+option:
+.PP
+.in +4n
+.EX
+$ \fBfretl\fP -f7 -drA DAEAC#E < scales/major
+   7      6      5      4      3      2      1      0
++--.-------------.-------------.------------------+
+|--2---|------|--1---|--7---|------|--6---|------|| 5
+|--7---|------|--6---|------|--5---|------|--4---|| 3
+|--5---|------|--4---|--3---|------|--2---|------|| 1
+|--2---|------|--1---|--7---|------|--6---|------|| 5
+|--5---|------|--4---|--3---|------|--2---|------|| 1
+|--1---|--7---|------|--6---|------|--5---|------|| 4
++--.-------------.-------------.------------------+
+.EE
+.in
+.PP
+You don't have to use only 6 strings.
+Add more strings simply by adding a new note to
+.IR tuning .
+.PP
+.in +4n
+.EX
+$ \fBfretl\fP -f7 -rA DF#AEAC#E < scales/major
+   7      6      5      4      3      2      1      0
++--.-------------.-------------.------------------+
+|--B---|------|--A---|--G#--|------|--F#--|------|| E
+|--G#--|------|--F#--|------|--E---|------|--D---|| C#
+|--E---|------|--D---|--C#--|------|--B---|------|| A
+|--B---|------|--A---|--G#--|------|--F#--|------|| E
+|--E---|------|--D---|--C#--|------|--B---|------|| A
+|--C#--|------|--B---|------|--A---|--G#--|------|| F#
+|--A---|--G#--|------|--F#--|------|--E---|------|| D
++--.-------------.-------------.------------------+
+.EE
+.in
+.
+.SH BUGS
+No support for the usual (right-handed) guitars.
