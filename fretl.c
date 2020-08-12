@@ -250,9 +250,9 @@ readw(char *out, size_t bufsiz)
 
 static void
 usage(const char *name) {
-	fprintf(stdout, "usage: %s [-r root] [-f fret] [-d] [tuning]\n", name);
-	fprintf(stdout, "       %s [-r tonic] [-f fret] [-d] [tuning] < scale\n", name);
-	fprintf(stdout, "       %s [-r root] [-f fret] [-d] [tuning] < chord\n", name);
+	fprintf(stdout, "usage: %s [-r root] [-f fret] [-dh] [tuning]\n", name);
+	fprintf(stdout, "       %s [-r tonic] [-f fret] [-dh] [tuning] < scale\n", name);
+	fprintf(stdout, "       %s [-r root] [-f fret] [-dh] [tuning] < chord\n", name);
 }
 
 int

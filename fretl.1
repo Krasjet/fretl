@@ -10,7 +10,7 @@ format
 .IR root ]
 .RB [ \-f
 .IR fret ]
-.RB [ \-d ]
+.RB [ \-dh ]
 .RI [ tuning ]
 .br
 .B fretl
@@ -18,7 +18,7 @@ format
 .IR tonic ]
 .RB [ \-f
 .IR fret ]
-.RB [ \-d ]
+.RB [ \-dh ]
 .RI [ tuning ]
 <
 .I scale
@@ -28,7 +28,7 @@ format
 .IR root ]
 .RB [ \-f
 .IR fret ]
-.RB [ \-d ]
+.RB [ \-dh ]
 .RI [ tuning ]
 <
 .I chord
@@ -63,7 +63,9 @@ section for some practical examples.
 .PP
 You should also specify a
 .I root
-note, or tonic when talking about scales, using
+note, or
+.I tonic
+when talking about scales, using
 the
 .B -r
 option, and a
@@ -90,6 +92,9 @@ If they are not provided, the default is A major scale for
 .B DAEABE
 tuning.
 .SH OPTIONS
+.TP
+.B \-h
+Print usage and exit.
 .TP
 .BI \-r " root"
 Set the root note (or tonal) of a chord, scale, or mode.
