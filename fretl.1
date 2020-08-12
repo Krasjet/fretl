@@ -12,6 +12,26 @@ format
 .IR fret ]
 .RB [ \-d ]
 .RI [ tuning ]
+.br
+.B fretl
+.RB [ \-r
+.IR tonic ]
+.RB [ \-f
+.IR fret ]
+.RB [ \-d ]
+.RI [ tuning ]
+<
+.I scale
+.br
+.B fretl
+.RB [ \-r
+.IR root ]
+.RB [ \-f
+.IR fret ]
+.RB [ \-d ]
+.RI [ tuning ]
+<
+.I chord
 .
 .SH DESCRIPTION
 .B fretl
@@ -110,9 +130,11 @@ $ echo 'P1 M2 M3 P4 P5 M6 M7' | \fBfretl\fP -f7 -rA DAEAC#E
 .EE
 .in
 .PP
-Alternatively, use predefined scales in the
+Alternatively, use predefined scales or chords in the
 .I scales
-directory that comes with the source code:
+and
+.I chords
+directories that come with the source code:
 .PP
 .in +4n
 .EX
