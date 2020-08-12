@@ -11,7 +11,6 @@
 
 enum {
   SCALE_MAX = 12,
-  FRET_MAX = 13,
   STRING_MAX = 20,
   INTERVAL_MAX_LEN = 10,
   NOTE_MAX_LEN = 7,
@@ -22,27 +21,33 @@ enum note_rep {
   REP_SCALE_DEGREE
 };
 
-static char fret_mark[FRET_MAX] =  {
-  [0] = '-',
-  [1] = '-',
-  [2] = '-',
-  [3] = '.',
-  [4] = '-',
-  [5] = '.',
-  [6] = '-',
-  [7] = '.',
-  [8] = '-',
-  [9] = '.',
-  [10] = '-',
-  [11] = '-',
-  [12] = ':'
-};
+/* get fret mark from 1 based index */
+char
+fret_mark(int fret)
+{
+  static char marks[12] =  {
+    [0] = '-',
+    [1] = '-',
+    [2] = '.',
+    [3] = '-',
+    [4] = '.',
+    [5] = '-',
+    [6] = '.',
+    [7] = '-',
+    [8] = '.',
+    [9] = '-',
+    [10] = '-',
+    [11] = ':'
+  };
+  return marks[(fret - 1) % 12];
+}
 
 static struct mint scale_intv[SCALE_MAX];
 static struct mnote scale_notes[SCALE_MAX];
 static int scale_midi[SCALE_MAX];
 static int scale_st[SCALE_MAX];
 static int pc_count;
+static int frets = 12;
 static enum note_rep rep = REP_PITCH_CLASS;
 
 static struct mnote root = {
@@ -126,12 +131,12 @@ print_center(const char *s, char pad, int space) {
 
 void
 print_border(void){
-  int i = FRET_MAX - 1;
+  int i = frets;
 
-  printf("+--%c---", fret_mark[i--]);
+  printf("+--%c---", fret_mark(i--));
 
-  for (; i >= 1; --i) {
-    printf("---%c---", fret_mark[i]);
+  for (; i > 0; --i) {
+    printf("---%c---", fret_mark(i));
   }
 
   printf("-+\n");
@@ -139,10 +144,10 @@ print_border(void){
 
 void
 print_fretnum(void){
-  char num[3];
-  int i = FRET_MAX - 1;
+  char num[4];
+  int i;
 
-  for (; i >= 1; --i) {
+  for (i = frets; i > 0; --i) {
     sprintf(num, "%d", i);
     fputc(' ', stdout);
     print_center(num, ' ', 6);
@@ -154,12 +159,12 @@ print_fretnum(void){
 void
 print_string(struct mnote base){
   int midi = mnote_tomidi(base);
-  int i = FRET_MAX - 1, j;
+  int i, j;
   char note[NOTE_MAX_LEN];
 
-  for (; i >= 1; --i) {
+  for (i = frets; i > 0; --i) {
     for (j = 0; j < pc_count; j++){
-      if (midi_same_pc(midi+i, scale_midi[j])) {
+      if (midi_same_pc(midi + i, scale_midi[j])) {
         switch (rep) {
           case REP_SCALE_DEGREE:
             mint_to_sdegree(scale_intv[j], note);
@@ -180,7 +185,7 @@ print_string(struct mnote base){
   }
 
   for (j = 0; j < pc_count; j++){
-    if (midi_same_pc(midi+i, scale_midi[j])) {
+    if (midi_same_pc(midi, scale_midi[j])) {
         switch (rep) {
           case REP_SCALE_DEGREE:
             mint_to_sdegree(scale_intv[j], note);
@@ -227,7 +232,8 @@ readw(char *out, size_t bufsiz)
 
 static void
 usage(const char *name) {
-	fprintf(stdout, "usage: %s -r ROOT [tuning]\n", name);
+	fprintf(stdout, "usage: %s [-r root] [-f frets] [-d] [tuning]\n", name);
+	fprintf(stdout, "       %s [-r root] [-f frets] [-d] [tuning] < scale\n", name);
 }
 
 int
@@ -236,11 +242,11 @@ main(int argc, char *argv[])
   char intv[INTERVAL_MAX_LEN];
   struct mnote strings[STRING_MAX];
   int str_count = 0;
-  char * s;
+  char *s;
   int i;
 
   int c;
-	while ((c = getopt(argc, argv, "hr:d")) != -1) {
+	while ((c = getopt(argc, argv, "hr:df:")) != -1) {
     switch (c) {
       case 'h':
         usage(argv[0]);
@@ -248,6 +254,12 @@ main(int argc, char *argv[])
       case 'r':
         if (!mnote_parse(optarg, &root) || abs(root.pc.accidental) > 1) {
           die("error: invalid root note %s\n", intv);
+        }
+        break;
+      case 'f':
+        frets = atoi(optarg);
+        if (frets < 1) {
+          die("error: frets must be > 1\n");
         }
         break;
       case 'd':
