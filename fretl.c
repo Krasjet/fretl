@@ -156,6 +156,20 @@ print_fretnum(void){
   printf("   0\n");
 }
 
+/* convert scale degree to string representation */
+void
+deg_to_rep(int degree, char * out)
+{
+  switch (rep) {
+    case REP_SCALE_DEGREE:
+      mint_to_sdegree(scale_intv[degree], out);
+      break;
+    case REP_PITCH_CLASS:
+      mnote_pc_toascii(scale_notes[degree].pc, out);
+      break;
+  }
+}
+
 void
 print_string(struct mnote base){
   int midi = mnote_tomidi(base);
@@ -165,14 +179,7 @@ print_string(struct mnote base){
   for (i = frets; i > 0; --i) {
     for (j = 0; j < pc_count; j++){
       if (midi_same_pc(midi + i, scale_midi[j])) {
-        switch (rep) {
-          case REP_SCALE_DEGREE:
-            mint_to_sdegree(scale_intv[j], note);
-            break;
-          case REP_PITCH_CLASS:
-            mnote_pc_toascii(scale_notes[j].pc, note);
-            break;
-        }
+        deg_to_rep(j, note);
         fputc('|', stdout);
         print_center(note, '-', 6);
         break;
@@ -186,14 +193,7 @@ print_string(struct mnote base){
 
   for (j = 0; j < pc_count; j++){
     if (midi_same_pc(midi, scale_midi[j])) {
-        switch (rep) {
-          case REP_SCALE_DEGREE:
-            mint_to_sdegree(scale_intv[j], note);
-            break;
-          case REP_PITCH_CLASS:
-            mnote_pc_toascii(scale_notes[j].pc, note);
-            break;
-        }
+      deg_to_rep(j, note);
       printf("|| %s\n", note);
       break;
     }
@@ -202,6 +202,24 @@ print_string(struct mnote base){
     /* no match */
     puts("||");
   }
+}
+
+void
+print_fretboard(const char * tuning)
+{
+  struct mnote strings[STRING_MAX];
+  int str_count = 0;
+  print_fretnum();
+  print_border();
+
+  /* we need to reverse the order of strings */
+  while((tuning = mnote_parse(tuning, &strings[str_count]))) {
+    str_count++;
+  }
+  for (str_count--; str_count >= 0; str_count--) {
+    print_string(strings[str_count]);
+  }
+  print_border();
 }
 
 /* returns 0 when failed */
@@ -240,9 +258,7 @@ int
 main(int argc, char *argv[])
 {
   char intv[INTERVAL_MAX_LEN];
-  struct mnote strings[STRING_MAX];
-  int str_count = 0;
-  char *s;
+  char *tuning;
   int i;
 
   int c;
@@ -259,7 +275,7 @@ main(int argc, char *argv[])
       case 'f':
         frets = atoi(optarg);
         if (frets < 1) {
-          die("error: frets must be > 1\n");
+          die("error: frets must be at least 1\n");
         }
         break;
       case 'd':
@@ -293,24 +309,14 @@ main(int argc, char *argv[])
     scale_midi[i] = mnote_tomidi(scale_notes[i]);
   }
 
-  /* parsing string tuning one by one */
+  /* defaults to DAEABE when no tuning given */
   if (optind < argc) {
-    s = argv[optind];
+    tuning = argv[optind];
   } else {
-    s = "DAEABE";
+    tuning = "DAEABE";
   }
-  print_fretnum();
-  print_border();
 
-  /* we need to reverse the order of strings */
-  while((s = mnote_parse(s, &strings[str_count]))) {
-    if (s)
-      str_count++;
-  }
-  for (str_count--; str_count >= 0; str_count--) {
-    print_string(strings[str_count]);
-  }
-  print_border();
+  print_fretboard(tuning);
 
   return 0;
 }
