@@ -21,27 +21,6 @@ enum note_rep {
   REP_SCALE_DEGREE
 };
 
-/* get fret mark from 1 based index */
-char
-fret_mark(int fret)
-{
-  static char marks[12] =  {
-    [0] = '-',
-    [1] = '-',
-    [2] = '.',
-    [3] = '-',
-    [4] = '.',
-    [5] = '-',
-    [6] = '.',
-    [7] = '-',
-    [8] = '.',
-    [9] = '-',
-    [10] = '-',
-    [11] = ':'
-  };
-  return marks[(fret - 1) % 12];
-}
-
 static struct mint scale_intv[SCALE_MAX];
 static struct mnote scale_notes[SCALE_MAX];
 static int scale_midi[SCALE_MAX];
@@ -91,7 +70,6 @@ die(const char *msg, ...)
 	exit(1);
 }
 
-
 /*
  * since our scales is represented using scale degrees, we could easily convert
  * interval, a relative concept, to scale degree (relative to major), an
@@ -112,6 +90,27 @@ mint_to_sdegree(struct mint interval, char *out)
     }
   }
   sprintf(out, "%d", interval.size + 1);
+}
+
+/* get fret mark from 1 based index */
+char
+fret_mark(int fret)
+{
+  static char marks[12] =  {
+    [0] = '-',
+    [1] = '-',
+    [2] = '.',
+    [3] = '-',
+    [4] = '.',
+    [5] = '-',
+    [6] = '.',
+    [7] = '-',
+    [8] = '.',
+    [9] = '-',
+    [10] = '-',
+    [11] = ':'
+  };
+  return marks[(fret - 1) % 12];
 }
 
 void
