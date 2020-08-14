@@ -21,12 +21,14 @@ enum note_rep {
   REP_SCALE_DEGREE
 };
 
+/* run-time variables */
 static struct mint scale_intv[SCALE_MAX];
 static struct mnote scale_notes[SCALE_MAX];
 static int scale_midi[SCALE_MAX];
 static int scale_st[SCALE_MAX];
 static int pc_count;
 static int frets = 12;
+static int capo = 0;
 static enum note_rep rep = REP_PITCH_CLASS;
 
 static struct mnote root = {
@@ -132,10 +134,10 @@ void
 print_border(void){
   int i = frets;
 
-  printf("+--%c---", fret_mark(i--));
+  printf("+--%c---", fret_mark(capo + i--));
 
   for (; i > 0; --i) {
-    printf("---%c---", fret_mark(i));
+    printf("---%c---", fret_mark(capo + i));
   }
 
   printf("-+\n");
@@ -177,7 +179,7 @@ print_string(struct mnote base){
 
   for (i = frets; i > 0; --i) {
     for (j = 0; j < pc_count; j++){
-      if (midi_same_pc(midi + i, scale_midi[j])) {
+      if (midi_same_pc(midi + capo + i, scale_midi[j])) {
         deg_to_rep(j, note);
         fputc('|', stdout);
         print_center(note, '-', 6);
@@ -191,7 +193,7 @@ print_string(struct mnote base){
   }
 
   for (j = 0; j < pc_count; j++){
-    if (midi_same_pc(midi, scale_midi[j])) {
+    if (midi_same_pc(midi + capo, scale_midi[j])) {
       deg_to_rep(j, note);
       printf("|| %s\n", note);
       break;
@@ -249,9 +251,9 @@ readw(char *out, size_t bufsiz)
 
 static void
 usage(const char *name) {
-	fprintf(stdout, "usage: %s [-r root] [-f fret] [-dh] [tuning]\n", name);
-	fprintf(stdout, "       %s [-r tonic] [-f fret] [-dh] [tuning] < scale\n", name);
-	fprintf(stdout, "       %s [-r root] [-f fret] [-dh] [tuning] < chord\n", name);
+	fprintf(stdout, "usage: %s [-r root] [-f fret] [-c capo] [-dh] [tuning]\n", name);
+	fprintf(stdout, "       %s [-r tonic] [-f fret] [-c capo] [-dh] [tuning] < scale\n", name);
+	fprintf(stdout, "       %s [-r root] [-f fret] [-c capo] [-dh] [tuning] < chord\n", name);
 }
 
 int
@@ -262,7 +264,7 @@ main(int argc, char *argv[])
   int i;
 
   int c;
-	while ((c = getopt(argc, argv, "hr:df:")) != -1) {
+	while ((c = getopt(argc, argv, "hr:df:c:")) != -1) {
     switch (c) {
       case 'h':
         usage(argv[0]);
@@ -280,6 +282,12 @@ main(int argc, char *argv[])
         break;
       case 'd':
         rep = REP_SCALE_DEGREE;
+        break;
+      case 'c':
+        capo = atoi(optarg);
+        if (capo < 0) {
+          die("error: capo can't be negative\n");
+        }
         break;
       default:
         usage(argv[0]);
