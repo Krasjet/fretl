@@ -2,7 +2,7 @@
 
 PREFIX = /usr/local
 
-CFLAGS = -Wall -Wextra -std=c99 -g3 -pedantic -Os -D_POSIX_C_SOURCE
+CFLAGS = -Wall -Wextra -std=c99 -g3 -pedantic -Os -D_POSIX_C_SOURCE -Imnote
 OBJ = fretl.o mnote/mint.o mnote/transpose.o mnote/mnote.o
 
 fretl: $(OBJ)
@@ -26,6 +26,6 @@ uninstall:
 	rm -f $(DESTDIR)$(PREFIX)/share/man/man1/fretl.1.gz
 
 clean:
-	rm -f test *.o mnote/*.o
+	rm -f fretl *.o mnote/*.o
 
 .PHONY: run clean

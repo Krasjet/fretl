@@ -5,9 +5,9 @@
 #include <ctype.h>
 #include <unistd.h>
 #include <getopt.h>
-#include "mnote/mint.h"
-#include "mnote/mnote.h"
-#include "mnote/transpose.h"
+#include <mint.h>
+#include <mnote.h>
+#include <transpose.h>
 
 enum {
   SCALE_MAX = 12,
