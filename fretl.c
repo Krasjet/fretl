@@ -140,7 +140,7 @@ print_border(void){
     printf("---%c---", fret_mark(capo + i));
   }
 
-  printf("-+\n");
+  puts("-+");
 }
 
 void
@@ -154,7 +154,7 @@ print_fretnum(void){
     print_center(num, ' ', 6);
   }
 
-  printf("   0\n");
+  puts("   0");
 }
 
 /* convert scale degree to string representation */
