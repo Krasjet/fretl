@@ -163,12 +163,12 @@ void
 deg_to_rep(int degree, char * out)
 {
   switch (rep) {
-    case REP_SCALE_DEGREE:
-      mint_to_sdegree(scale_intv[degree], out);
-      break;
-    case REP_PITCH_CLASS:
-      pitch_pc_to_ascii(scale_pitch[degree].pc, out);
-      break;
+  case REP_SCALE_DEGREE:
+    mint_to_sdegree(scale_intv[degree], out);
+    break;
+  case REP_PITCH_CLASS:
+    pitch_pc_to_ascii(scale_pitch[degree].pc, out);
+    break;
   }
 }
 
@@ -267,32 +267,32 @@ main(int argc, char *argv[])
   int c;
 	while ((c = getopt(argc, argv, "hr:df:c:")) != -1) {
     switch (c) {
-      case 'h':
-        usage(argv[0]);
-        return 0;
-      case 'r':
-        if (!pitch_parse(optarg, &root) || abs(root.pc.accidental) > 1) {
-          die("error: invalid root note %s\n", intv);
-        }
-        break;
-      case 'f':
-        frets = atoi(optarg);
-        if (frets < 1) {
-          die("error: frets must be at least 1\n");
-        }
-        break;
-      case 'd':
-        rep = REP_SCALE_DEGREE;
-        break;
-      case 'c':
-        capo = atoi(optarg);
-        if (capo < 0) {
-          die("error: capo can't be negative\n");
-        }
-        break;
-      default:
-        usage(argv[0]);
-        return 1;
+    case 'h':
+      usage(argv[0]);
+      return 0;
+    case 'r':
+      if (!pitch_parse(optarg, &root) || abs(root.pc.accidental) > 1) {
+        die("error: invalid root note %s\n", intv);
+      }
+      break;
+    case 'f':
+      frets = atoi(optarg);
+      if (frets < 1) {
+        die("error: frets must be at least 1\n");
+      }
+      break;
+    case 'd':
+      rep = REP_SCALE_DEGREE;
+      break;
+    case 'c':
+      capo = atoi(optarg);
+      if (capo < 0) {
+        die("error: capo can't be negative\n");
+      }
+      break;
+    default:
+      usage(argv[0]);
+      return 1;
     }
 	}
 
