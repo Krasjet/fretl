@@ -2,18 +2,18 @@
 
 PREFIX = /usr/local
 
-CFLAGS = -Wall -Wextra -std=c99 -g3 -pedantic -Os -D_POSIX_C_SOURCE -Imnote
-OBJ = fretl.o mnote/mint.o mnote/transpose.o mnote/mnote.o
+CFLAGS = -Wall -Wextra -std=c99 -g3 -pedantic -Os -D_POSIX_C_SOURCE -Imint
+OBJ = fretl.o mint/mint.o mint/pitch.o mint/transpose.o
+
+run: fretl
+	@./fretl
 
 fretl: $(OBJ)
 	$(CC) $(CFLAGS) -o $@ $(OBJ)
 
-mnote/mint.o: mnote/mint.h
-mnote/mnote.o: mnote/mnote.h
-mnote/transpose.o: mnote/mint.h mnote/transpose.h mnote/mnote.h
-
-run: fretl
-	@./fretl
+mint/mint.o: mint/mint.h
+mint/pitch.o: mint/pitch.h
+mint/transpose.o: mint/mint.h mint/pitch.h mint/transpose.h
 
 install: fretl fretl.1
 	mkdir -p $(DESTDIR)$(PREFIX)/bin
@@ -26,6 +26,6 @@ uninstall:
 	rm -f $(DESTDIR)$(PREFIX)/share/man/man1/fretl.1.gz
 
 clean:
-	rm -f fretl *.o mnote/*.o
+	rm -f fretl *.o mint/*.o
 
 .PHONY: run clean

@@ -5,8 +5,9 @@
 #include <ctype.h>
 #include <unistd.h>
 #include <getopt.h>
+
 #include <mint.h>
-#include <mnote.h>
+#include <pitch.h>
 #include <transpose.h>
 
 enum {
@@ -23,7 +24,7 @@ enum note_rep {
 
 /* run-time variables */
 static struct mint scale_intv[SCALE_MAX];
-static struct mnote scale_notes[SCALE_MAX];
+static struct pitch scale_pitch[SCALE_MAX];
 static int scale_midi[SCALE_MAX];
 static int scale_st[SCALE_MAX];
 static int pc_count;
@@ -31,10 +32,10 @@ static int frets = 12;
 static int capo = 0;
 static enum note_rep rep = REP_PITCH_CLASS;
 
-static struct mnote root = {
+static struct pitch root = {
   .octave = 0,
   .pc = {
-    .letter = MNOTE_A,
+    .letter = PITCH_A,
     .accidental = 0
   }
 };
@@ -166,14 +167,14 @@ deg_to_rep(int degree, char * out)
       mint_to_sdegree(scale_intv[degree], out);
       break;
     case REP_PITCH_CLASS:
-      mnote_pc_toascii(scale_notes[degree].pc, out);
+      pitch_pc_to_ascii(scale_pitch[degree].pc, out);
       break;
   }
 }
 
 void
-print_string(struct mnote base){
-  int midi = mnote_tomidi(base);
+print_string(struct pitch base){
+  int midi = pitch_to_midi(base);
   int i, j;
   char note[NOTE_MAX_LEN];
 
@@ -208,13 +209,13 @@ print_string(struct mnote base){
 void
 print_fretboard(const char * tuning)
 {
-  struct mnote strings[STRING_MAX];
+  struct pitch strings[STRING_MAX];
   int str_count = 0;
   print_fretnum();
   print_border();
 
   /* we need to reverse the order of strings */
-  while((tuning = mnote_parse(tuning, &strings[str_count]))) {
+  while((tuning = pitch_parse(tuning, &strings[str_count]))) {
     str_count++;
   }
   for (str_count--; str_count >= 0; str_count--) {
@@ -270,7 +271,7 @@ main(int argc, char *argv[])
         usage(argv[0]);
         return 0;
       case 'r':
-        if (!mnote_parse(optarg, &root) || abs(root.pc.accidental) > 1) {
+        if (!pitch_parse(optarg, &root) || abs(root.pc.accidental) > 1) {
           die("error: invalid root note %s\n", intv);
         }
         break;
@@ -313,8 +314,8 @@ main(int argc, char *argv[])
   /* build metadata for matching */
   for (i = 0; i < pc_count; i++) {
     scale_st[i] = mint_to_st(scale_intv[i]);
-    scale_notes[i] = transpose_mnote(root, scale_intv[i], DIR_UPWARD);
-    scale_midi[i] = mnote_tomidi(scale_notes[i]);
+    scale_pitch[i] = transpose_pitch(root, scale_intv[i], DIR_UPWARD);
+    scale_midi[i] = pitch_to_midi(scale_pitch[i]);
   }
 
   /* defaults to DAEABE when no tuning given */

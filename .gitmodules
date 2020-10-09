@@ -1,3 +1,3 @@
-[submodule "mnote"]
-	path = mnote
-	url = https://github.com/Krasjet/mnote
+[submodule "mint"]
+	path = mint
+	url = https://github.com/Krasjet/mint
