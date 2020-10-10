@@ -215,7 +215,8 @@ print_fretboard(const char * tuning)
   print_border();
 
   /* we need to reverse the order of strings */
-  while((tuning = pitch_parse(tuning, &strings[str_count]))) {
+  while(str_count < STRING_MAX &&
+        (tuning = pitch_parse(tuning, &strings[str_count]))) {
     str_count++;
   }
   for (str_count--; str_count >= 0; str_count--) {
