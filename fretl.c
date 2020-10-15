@@ -65,12 +65,12 @@ midi_same_pc(int x, int y)
 void
 die(const char *msg, ...)
 {
-	va_list ap;
+  va_list ap;
 
-	va_start(ap, msg);
-	vfprintf(stderr, msg, ap);
-	va_end(ap);
-	exit(1);
+  va_start(ap, msg);
+  vfprintf(stderr, msg, ap);
+  va_end(ap);
+  exit(1);
 }
 
 /*
@@ -117,7 +117,8 @@ fret_mark(int fret)
 }
 
 void
-print_center(const char *s, char pad, int space) {
+print_center(const char *s, char pad, int space)
+{
   int len = strlen(s);
   int padlen = (space - len) / 2;
   int i;
@@ -132,7 +133,8 @@ print_center(const char *s, char pad, int space) {
 }
 
 void
-print_border(void){
+print_border(void)
+{
   int i = frets;
 
   printf("+--%c---", fret_mark(capo + i--));
@@ -145,7 +147,8 @@ print_border(void){
 }
 
 void
-print_fretnum(void){
+print_fretnum(void)
+{
   char num[4];
   int i;
 
@@ -173,7 +176,8 @@ deg_to_rep(int degree, char * out)
 }
 
 void
-print_string(struct pitch base){
+print_string(struct pitch base)
+{
   int midi = pitch_to_midi(base);
   int i, j;
   char note[NOTE_MAX_LEN];
@@ -252,10 +256,11 @@ readw(char *out, size_t bufsiz)
 }
 
 static void
-usage(const char *name) {
-	fprintf(stdout, "usage: %s [-r root] [-f fret] [-c capo] [-dh] [tuning]\n", name);
-	fprintf(stdout, "       %s [-r tonic] [-f fret] [-c capo] [-dh] [tuning] < scale\n", name);
-	fprintf(stdout, "       %s [-r root] [-f fret] [-c capo] [-dh] [tuning] < chord\n", name);
+usage(const char *name)
+{
+  fprintf(stdout, "usage: %s [-r root] [-f fret] [-c capo] [-dh] [tuning]\n", name);
+  fprintf(stdout, "       %s [-r tonic] [-f fret] [-c capo] [-dh] [tuning] < scale\n", name);
+  fprintf(stdout, "       %s [-r root] [-f fret] [-c capo] [-dh] [tuning] < chord\n", name);
 }
 
 int
@@ -266,7 +271,7 @@ main(int argc, char *argv[])
   int i;
 
   int c;
-	while ((c = getopt(argc, argv, "hr:df:c:")) != -1) {
+  while ((c = getopt(argc, argv, "hr:df:c:")) != -1) {
     switch (c) {
     case 'h':
       usage(argv[0]);
@@ -295,7 +300,7 @@ main(int argc, char *argv[])
       usage(argv[0]);
       return 1;
     }
-	}
+  }
 
   if (isatty(fileno(stdin))) {
     /* use major scale when no input given */
