@@ -6,9 +6,6 @@ CC = cc
 CFLAGS = -Wall -Wextra -std=c99 -g3 -pedantic -Os -D_POSIX_C_SOURCE -Imint
 OBJ = fretl.o mint/mint.o mint/pitch.o mint/transpose.o
 
-run: fretl
-	@./fretl
-
 fretl: $(OBJ)
 	$(CC) $(CFLAGS) -o $@ $(OBJ)
 
