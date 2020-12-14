@@ -1,27 +1,25 @@
 fretl
 =====
 
-       12     11     10     9      8      7      6      5      4      3      2      1      0
-    +--:--------------------.-------------.-------------.-------------.------------------+
-    |--E---|------|--D---|--C#--|------|--B---|------|--A---|--G#--|------|--F#--|------|| E
-    |--B---|------|--A---|--G#--|------|--F#--|------|--E---|------|--D---|--C#--|------|| B
-    |--A---|--G#--|------|--F#--|------|--E---|------|--D---|--C#--|------|--B---|------|| A
-    |--E---|------|--D---|--C#--|------|--B---|------|--A---|--G#--|------|--F#--|------|| E
-    |--A---|--G#--|------|--F#--|------|--E---|------|--D---|--C#--|------|--B---|------|| A
-    |--D---|--C#--|------|--B---|------|--A---|--G#--|------|--F#--|------|--E---|------|| D
-    +--:--------------------.-------------.-------------.-------------.------------------+
+       9      8      7      6      5      4      3      2      1      0
+    +--.-------------.-------------.-------------.------------------+
+    |--C#--|------|--B---|------|--A---|--G#--|------|--F#--|------|| E
+    |--G#--|------|--F#--|------|--E---|------|--D---|--C#--|------|| B
+    |--F#--|------|--E---|------|--D---|--C#--|------|--B---|------|| A
+    |--C#--|------|--B---|------|--A---|--G#--|------|--F#--|------|| E
+    |--F#--|------|--E---|------|--D---|--C#--|------|--B---|------|| A
+    |--B---|------|--A---|--G#--|------|--F#--|------|--E---|------|| D
+    +--.-------------.-------------.-------------.------------------+
 
 fretl is a command-line fretboard specifically designed for mirrored (a.k.a.
 left-handed) guitars.
 
 Unlike most fretboard diagrams you can found online, `fretl`
 
-1. Supports mirrored guitar (only), since some misfortuned ones learned to
-   reason about notes on guitar the opposite way.
-2. Has first-class support for alternative tunings, since people can disagree
-   upon how guitar should be tuned.
-3. Has no assumption about how many strings a guitar should have, with the same
-   reasoning.
+1. Supports mirrored guitar, since some misfortuned ones learned to reason
+   about notes on guitar the opposite way.
+2. Has first-class support for alternative tunings
+3. Has no assumption about how many strings a guitar should have
 4. Uses unambiguous representation of notes, intervals, and scales, so it can
    distinguish enharmonic equivalent notes such as C# and Db.
 
