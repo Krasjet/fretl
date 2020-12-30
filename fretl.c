@@ -149,7 +149,7 @@ print_border(void)
 void
 print_fretnum(void)
 {
-  char num[4];
+  char num[11];
   int i;
 
   for (i = frets; i > 0; --i) {
